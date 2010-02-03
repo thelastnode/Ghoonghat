@@ -1,6 +1,7 @@
 #ifndef LIGHT_HPP
 #define LIGHT_HPP
 
+#include "constants.hpp"
 #include "point.hpp"
 #include "gesturerecognizer.hpp"
 
@@ -10,15 +11,25 @@ namespace VisionControl
     {
     public:
         Light(int x0, int y0);
+        Light(Point p);
 
         void clearGesture();
 
         enum Handedness { Unknown, Left, Right };
         Handedness handedness;
 
+        void operator<<(const Point p);
+	   void operator--(int /* post */) { hp--; }
+	   void operator++(int /* post */) { hp = MAX_HP; }
+
+        Point position() const { return currentPosition; }
+        Point changeInPosition() const { return dPosition; }
+	   int health() const { return hp; }
+
+
     private:
-        Point current;
-        Point change;
+        Point currentPosition;
+        Point dPosition;
         GestureRecognizer gestureRecognizer;
         int distance;
         int hp;

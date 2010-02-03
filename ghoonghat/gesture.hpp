@@ -4,29 +4,32 @@
 #include <list>
 #include <string>
 
-class Gesture
+namespace VisionControl
 {
-	public:
-		enum Direction { Neutral, Up, Down, Left, Right };
+    class Gesture
+    {
+        public:
+            enum Direction { Neutral, Up, Down, Left, Right };
 
-		std::string str();
+            std::string str();
 
-		Gesture& operator<<(const Direction);
-		Direction operator[](const int index);
+            Gesture& operator<<(const Direction);
+            Direction operator[](const int index);
 
-		Direction last() {
-			if (dirs.size() == 0) return Neutral;
-			else return dirs.back();
-		}
+            Direction last() {
+                if (dirs.size() == 0) return Neutral;
+                else return dirs.back();
+            }
 
-	private:
-		std::list<Direction> dirs;
-};
+        private:
+            std::list<Direction> dirs;
+    };
 
-inline Gesture& Gesture::operator<<(const Direction d)
-{
-	dirs.push_back(d);
-	return *this;
+    inline Gesture& Gesture::operator<<(const Direction d)
+    {
+        dirs.push_back(d);
+        return *this;
+    }
 }
 
 #endif

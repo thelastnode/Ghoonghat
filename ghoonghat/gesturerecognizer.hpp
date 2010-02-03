@@ -4,22 +4,23 @@
 #include "gesture.hpp"
 #include "point.hpp"
 
-class GestureRecognizer
+namespace VisionControl
 {
-    public:
-        Gesture getGesture() { return gesture; }
+    class GestureRecognizer
+    {
+        public:
+            Gesture getGesture() const { return gesture; }
 
-        GestureRecognizer& operator<<(const Point p);
+            GestureRecognizer& operator<<(const Point p);
 
-        GestureRecognizer(const Point p) : lastPoint(p) {}
+            GestureRecognizer(const Point p) : lastPoint(p) {}
 
-    private:
-        Gesture gesture;
-        Point lastPoint;
+        private:
+            Gesture gesture;
+            Point lastPoint;
 
-        static Gesture::Direction changeToDir(const int dx, const int dy);
-
-        static const int DIST_THRESHOLD = 50;
-};
+            static Gesture::Direction changeToDir(const int dx, const int dy);
+    };
+}
 
 #endif

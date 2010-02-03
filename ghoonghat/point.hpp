@@ -1,13 +1,18 @@
 #ifndef POINT_HPP
 #define POINT_HPP
 
-class Point
+namespace VisionControl
 {
-public:
-    int x;
-    int y;
+    class Point
+    {
+    public:
+        int x;
+        int y;
 
-    Point(const int a, const int b) : x(a), y(b) {}
-};
+        Point(const int a, const int b) : x(a), y(b) {}
+
+        Point operator-(const Point& p) const;
+    };
+}
 
 #endif // POINT_HPP
