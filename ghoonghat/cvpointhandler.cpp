@@ -53,27 +53,30 @@ void CvPointHandler::process(IplImage *frame)
         for (lightIterator = lights.begin(); lightIterator != lights.end(); lightIterator++) {
             Point midpoint = calcMidpoint(*unglobbedIterator, (*lightIterator).position());
             int r = 0, g = 0, b = 0;
-            for (int y = midpoint.y-4; y < midpoint.y+4; y+=2) {
+            for (int y = midpoint.y-MIDPOINT_CHECK_RADIUS; y <= midpoint.y+MIDPOINT_CHECK_RADIUS; y+=MIDPOINT_CHECK_STEP) {
                 uchar* ptr = (uchar*) (frame->imageData + y * frame->widthStep);
-                for (int x = midpoint.x-4; x < midpoint.x+4; x+=2) {
+                for (int x = midpoint.x-MIDPOINT_CHECK_RADIUS; x <= midpoint.x+MIDPOINT_CHECK_RADIUS; x+=MIDPOINT_CHECK_STEP) {
+                    if (x < 0 || y < 0 || x >= CAM_WIDTH || y >= CAM_HEIGHT) {
+                        continue;
+                    }
                     r += ptr[3*x+0];
                     g += ptr[3*x+1];
                     b += ptr[3*x+2];
                 }
             }
 
-            printf("midpoint rgb:(%d, %d, %d)\n", r/25, g/25, b/25);
-
             // "too close" to be considered a unique point... yea, that's a bit of stretch on the function name...
             //if (tooClose(*unglobbedIterator, (*lightIterator).position(), LIGHT_DIST_THRESHOLD)) {
-            if (r > MIDPOINT_COLOR_THRESHOLD*25 || g > MIDPOINT_COLOR_THRESHOLD*25 || b > MIDPOINT_COLOR_THRESHOLD*25) {
+            if (r > MIDPOINT_COLOR_THRESHOLD*MIDPOINT_NUM_POINT_CHECK
+                || g > MIDPOINT_COLOR_THRESHOLD*MIDPOINT_NUM_POINT_CHECK
+                || b > MIDPOINT_COLOR_THRESHOLD*MIDPOINT_NUM_POINT_CHECK) {
                 (*lightIterator) << (*unglobbedIterator);
                 decrement.erase(&*lightIterator);
                 break;
             }
         }
-        if (lightIterator == lights.end()) {
-             // Didn't get assigned to a light
+        if (lightIterator == lights.end() && lights.size() < 2) {
+             // Didn't get assigned to a light AND < 2 lights in existence
              Point p = *unglobbedIterator;
              lights.push_back(Light(p.x, p.y));
         }
@@ -82,7 +85,11 @@ void CvPointHandler::process(IplImage *frame)
         (**it)--;
     }
     lights.remove_if(noHealth);
+
     // TODO handle lights
+
+    // TODO Delete Debug
+    /*
     int i = 0;
     for (list<Light>::iterator it = lights.begin(); it != lights.end(); it++) {
         Light l = *it;
@@ -98,4 +105,5 @@ void CvPointHandler::process(IplImage *frame)
         debugfilename++;
         cvSaveImage(ss.str().c_str(),frame);
     }
+    */
 }
