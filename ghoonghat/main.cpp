@@ -14,9 +14,6 @@
 using namespace std;
 using namespace VisionControl;
 
-//TODO: use COLOR_THRESHOLD
-int THRESHOLD = 160;
-
 CvPointHandler ph;
 
 void handleFrame(IplImage* frame) {
@@ -26,7 +23,7 @@ void handleFrame(IplImage* frame) {
             int r = ptr[3*x+0];
             int g = ptr[3*x+1];
             int b = ptr[3*x+2];
-            if (r > THRESHOLD && g > THRESHOLD && b > THRESHOLD) {
+            if (r > COLOR_THRESHOLD && g > COLOR_THRESHOLD && b > COLOR_THRESHOLD) {
                 ph << Point(x, y);
             }
         }

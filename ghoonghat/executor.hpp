@@ -15,18 +15,36 @@ namespace VisionControl
         void process(std::list<Light> &lights);
 
     private:
-        enum State { Dead, Activation, MouseMove, Charging, Discharging, Zoom, Scroll, Volume, FFRW, Gesture };
+        enum State { Dead, MouseMove, Charging, Discharging, FFRW, Gesture };
 
         State currentState;
-        int energy;
         int charge;
 
         Light *left;
         Light *right;
 
+        bool hasMoved;
+        bool hasMouseMoved;
+
+        void determineHandedness(std::list<Light> &lights);
+
         // Methods abusing xdotool
         void mouseMove(int dx, int dy);
-        void mouseClick();
+
+        enum MouseButton { Left, Right };
+        void mouseClick(MouseButton button);
+
+        enum VolumeChange { Louder, Softer };
+        void volume(VolumeChange change);
+
+        enum MediaFunction { FF, RW, PlayPause };
+        void mediaControl(MediaFunction func);
+
+        enum ZoomControl { In, Out };
+        void zoom(ZoomControl dir);
+
+        enum ScrollControl { Up, Down };
+        void scroll(ScrollControl dir);
     };
 }
 

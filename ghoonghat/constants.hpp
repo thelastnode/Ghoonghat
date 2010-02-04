@@ -7,7 +7,7 @@ namespace VisionControl
     const int CAM_HEIGHT = 480;
 
     // Distance until gesture activates
-    const int GEST_DIST_THRESHOLD = 50;
+    const int GEST_DIST_THRESHOLD = 30;
 
     // Distance until a point is considered distinct from another
     const int POINT_DIST_THRESHOLD = 20;
@@ -16,7 +16,7 @@ namespace VisionControl
     const int LIGHT_DIST_THRESHOLD = 50; // 100;
 
     // Minimum movement required to add to distance
-    const int JITTER_THRESHOLD = 10;
+    const int JITTER_THRESHOLD = 5;
 
     // Minimum R, G and B values to consider for a point
     const int COLOR_THRESHOLD = 130;
@@ -33,15 +33,17 @@ namespace VisionControl
     const int MIDPOINT_NUM_POINT_CHECK = ((2*MIDPOINT_CHECK_RADIUS)/MIDPOINT_CHECK_STEP+1)<<2;
 
     // Starting HP (health points) of a Light
-    const int MAX_HP = 5;
+    const int MAX_HP = 3;
 
     // Multiplier for mouse acceleration
     const int MOUSE_ACCEL = 3;
 
     // State machine constants:
+    // Maximum required charge
+    const int REQUIRED_CHARGE = 20;
 
-    // Required activation energy
-    const int ACTIVATION_ENERGY = 3;
+    // Minimum number of frames for two-point to one-point transition to be accepted
+    const int REQUIRED_DISCHARGE = 3;
 }
 
 #endif // CONSTANTS_HPP

@@ -5,14 +5,16 @@ HEADERS += light.hpp \
     pointhandler.hpp \
     constants.hpp \
     cvpointhandler.hpp \
-    deprecated.hpp
+    deprecated.hpp \
+    executor.hpp
 SOURCES += light.cpp \
     point.cpp \
     gesturerecognizer.cpp \
     gesture.cpp \
     main.cpp \
     pointhandler.cpp \
-    cvpointhandler.cpp
+    cvpointhandler.cpp \
+    executor.cpp
 CFLAGS += -I/usr/include/opencv
 LIBS += -lcxcore \
     -lcv \
