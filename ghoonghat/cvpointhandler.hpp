@@ -15,9 +15,6 @@ namespace VisionControl
 
         void process(IplImage* frame);
 
-        //TODO: remove debug
-        int debugfilename;
-
     protected:
         Executor executor;
 

@@ -1,4 +1,3 @@
-#include <cstdio>
 #include <cstdlib>
 #include <list>
 #include <set>
@@ -8,7 +7,7 @@
 using namespace std;
 using namespace VisionControl;
 
-CvPointHandler::CvPointHandler() : PointHandler(), debugfilename(0)
+CvPointHandler::CvPointHandler() : PointHandler()
 {
 }
 
@@ -85,14 +84,4 @@ void CvPointHandler::process(IplImage *frame)
     lights.remove_if(noHealth);
 
     executor.process(lights);
-
-    // TODO Delete Debug
-    int i = 0;
-    for (list<Light>::iterator it = lights.begin(); it != lights.end(); it++) {
-        Light l = *it;
-        printf("Light %d - Position: (%d, %d), dPosition: (%d, %d), Distance: %d\n", i,
-            l.position().x, l.position().y,
-            l.changeInPosition().x, l.changeInPosition().y, l.distanceTraveled());
-        i++;
-    }
 }

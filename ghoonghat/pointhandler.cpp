@@ -74,17 +74,6 @@ void PointHandler::process()
         (**it)--;
     }
     lights.remove_if(noHealth);
-    // TODO handle lights
-    int i = 0;
-    for (list<Light>::iterator it = lights.begin(); it != lights.end(); it++) {
-        Light l = *it;
-        /*
-        printf("Light %d - Position: (%d, %d), dPosition: (%d, %d)\n", i,
-            l.position().x, l.position().y,
-        l.changeInPosition().x, l.changeInPosition.y);
-        */
-        printf("Light %d - Position: (%d, %d)\n", i,
-            l.position().x, l.position().y);
-        i++;
-    }
+
+    // Handle lights
 }
