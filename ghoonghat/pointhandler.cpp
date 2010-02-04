@@ -6,7 +6,6 @@
 #include "constants.hpp"
 #include "pointhandler.hpp"
 
-
 using namespace std;
 using namespace VisionControl;
 
@@ -16,7 +15,7 @@ PointHandler& PointHandler::operator<<(const Point p)
     return (*this);
 }
 
-inline bool PointHandler::tooClose(const Point p1, const Point p2, const int threshold)
+bool PointHandler::tooClose(const Point p1, const Point p2, const int threshold)
 {
     return ((abs(p2.x - p1.x) + abs(p2.y - p1.y)) < threshold);
 }
