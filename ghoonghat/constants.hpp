@@ -34,6 +34,14 @@ namespace VisionControl
 
     // Starting HP (health points) of a Light
     const int MAX_HP = 5;
+
+    // Multiplier for mouse acceleration
+    const int MOUSE_ACCEL = 3;
+
+    // State machine constants:
+
+    // Required activation energy
+    const int ACTIVATION_ENERGY = 3;
 }
 
 #endif // CONSTANTS_HPP

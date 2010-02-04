@@ -26,6 +26,7 @@ namespace VisionControl
         Point changeInPosition() const { return dPosition; }
         int health() const { return hp; }
         int distanceTraveled() const { return distance; }
+        int changeInDistance() const;
 
 
     private:

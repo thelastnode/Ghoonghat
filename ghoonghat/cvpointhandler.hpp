@@ -4,6 +4,7 @@
 #include <opencv/cv.h>
 
 #include "pointhandler.hpp"
+#include "executor.hpp"
 
 namespace VisionControl
 {
@@ -18,6 +19,8 @@ namespace VisionControl
         int debugfilename;
 
     protected:
+        Executor executor;
+
         Point calcMidpoint(Point a, Point b);
     };
 }

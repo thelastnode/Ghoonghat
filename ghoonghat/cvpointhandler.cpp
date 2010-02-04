@@ -5,10 +5,6 @@
 
 #include "cvpointhandler.hpp"
 
-//TODO remove debug imports
-#include <opencv/highgui.h>
-#include <sstream>
-
 using namespace std;
 using namespace VisionControl;
 
@@ -70,8 +66,10 @@ void CvPointHandler::process(IplImage *frame)
             if (r > MIDPOINT_COLOR_THRESHOLD*MIDPOINT_NUM_POINT_CHECK
                 || g > MIDPOINT_COLOR_THRESHOLD*MIDPOINT_NUM_POINT_CHECK
                 || b > MIDPOINT_COLOR_THRESHOLD*MIDPOINT_NUM_POINT_CHECK) {
-                (*lightIterator) << (*unglobbedIterator);
-                decrement.erase(&*lightIterator);
+                    if (decrement.find(&*lightIterator) != decrement.end()) {
+                        (*lightIterator) << (*unglobbedIterator);
+                        decrement.erase(&*lightIterator);
+                    }
                 break;
             }
         }
@@ -86,10 +84,9 @@ void CvPointHandler::process(IplImage *frame)
     }
     lights.remove_if(noHealth);
 
-    // TODO handle lights
+    executor.process(lights);
 
     // TODO Delete Debug
-    /*
     int i = 0;
     for (list<Light>::iterator it = lights.begin(); it != lights.end(); it++) {
         Light l = *it;
@@ -98,12 +95,4 @@ void CvPointHandler::process(IplImage *frame)
             l.changeInPosition().x, l.changeInPosition().y, l.distanceTraveled());
         i++;
     }
-    stringstream ss;
-    //debug print frame if crap happens
-    if (i>1){
-        ss<<"output"<<debugfilename<<".jpg";
-        debugfilename++;
-        cvSaveImage(ss.str().c_str(),frame);
-    }
-    */
 }

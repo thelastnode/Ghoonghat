@@ -49,16 +49,10 @@ int main(int argc, char **argv)
 
     for (;;) {
         IplImage *frame = cvQueryFrame(cap);
-        IplImage *out = cvCreateImage(cvGetSize(frame), frame->depth,
-                frame->nChannels);
-        cvCvtColor(frame, out, CV_RGB2BGR);
-        handleFrame(out);
-        cvShowImage("Cam", out);
-        cvReleaseImage(&out);
+        handleFrame(frame);
+        cvShowImage("Cam", frame);
         char key = cvWaitKey(2);
         if (key == 27) break;
-        if (key == 'w') { THRESHOLD++; printf("THRESHOLD: %d\n", THRESHOLD); }
-        if (key == 's') { THRESHOLD--; printf("THRESHOLD: %d\n", THRESHOLD); }
     }
     cvReleaseCapture(&cap);
     cvDestroyWindow("Cam");
