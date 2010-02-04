@@ -6,6 +6,8 @@
 #include "light.hpp"
 #include "point.hpp"
 
+#include "deprecated.hpp"
+
 namespace VisionControl
 {
     class PointHandler
@@ -14,17 +16,17 @@ namespace VisionControl
         PointHandler() {}
 
         PointHandler& operator<<(const Point p);
-        void process();
+        DEPRECATED(void process());
 
-    private:
+    protected:
         std::list<Point> pointsToProcess;
         std::list<Light> lights;
 
         // For determining distance
         bool tooClose(Point p1, Point p2, int threshold);
 
-	   // For removing Lights
-	   static bool noHealth(const Light& l); 
+       // For removing Lights
+       static bool noHealth(const Light& l);
     };
 }
 

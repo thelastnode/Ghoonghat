@@ -1,3 +1,7 @@
+#include <cstdlib>
+// TODO DELETE
+#include <cstdio>
+
 #include "constants.hpp"
 #include "light.hpp"
 
@@ -11,13 +15,15 @@ Light::Light(Point p) : handedness(Unknown), currentPosition(p.x, p.y), dPositio
 {
 }
 
-void Light::operator<<(const Point p)
+Light& Light::operator<<(const Point p)
 {
-    /*
-    dPosition = currentPosition - p;
+    dPosition = p - currentPosition;
+    //printf("p: (%d, %d), current: (%d, %d) dPosition:(%d, %d)\n", p.x, p.y, currentPosition.x, currentPosition.y, dPosition.x, dPosition.y);
     gestureRecognizer << p;
     currentPosition = p;
-    distance += dPosition.x + dPosition.y;
-    */
-    // return (*this);
+    int d = abs(dPosition.x) + abs(dPosition.y);
+    if (d > JITTER_THRESHOLD) {
+        distance += d;
+    }
+    return (*this);
 }

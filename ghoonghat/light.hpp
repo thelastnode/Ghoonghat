@@ -18,13 +18,14 @@ namespace VisionControl
         enum Handedness { Unknown, Left, Right };
         Handedness handedness;
 
-        void operator<<(const Point p);
-	   void operator--(int /* post */) { hp--; }
-	   void operator++(int /* post */) { hp = MAX_HP; }
+        Light& operator<<(const Point p);
+        void operator--(int /* post */) { hp--; }
+        void operator++(int /* post */) { hp = MAX_HP; }
 
         Point position() const { return currentPosition; }
         Point changeInPosition() const { return dPosition; }
-	   int health() const { return hp; }
+        int health() const { return hp; }
+        int distanceTraveled() const { return distance; }
 
 
     private:

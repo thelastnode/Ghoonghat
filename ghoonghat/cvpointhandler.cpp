@@ -3,33 +3,26 @@
 #include <list>
 #include <set>
 
-#include "constants.hpp"
-#include "pointhandler.hpp"
+#include "cvpointhandler.hpp"
 
+//TODO remove debug imports
+#include <opencv/highgui.h>
+#include <sstream>
 
 using namespace std;
 using namespace VisionControl;
 
-PointHandler& PointHandler::operator<<(const Point p)
+CvPointHandler::CvPointHandler() : PointHandler(), debugfilename(0)
 {
-    pointsToProcess.push_back(p);
-    return (*this);
 }
 
-inline bool PointHandler::tooClose(const Point p1, const Point p2, const int threshold)
+Point CvPointHandler::calcMidpoint(Point a, Point b)
 {
-    return ((abs(p2.x - p1.x) + abs(p2.y - p1.y)) < threshold);
+    return Point((a.x + b.x)/2, (a.y + b.y)/2);
 }
 
-bool PointHandler::noHealth(const Light& l)
+void CvPointHandler::process(IplImage *frame)
 {
-    return (l.health() == 0);
-}
-
-void PointHandler::process()
-{
-    // DEPRECATED
-
     list<Point> unglobbed;
 
     for (list<Point>::const_iterator it = pointsToProcess.begin(); it != pointsToProcess.end(); it++)
@@ -58,8 +51,22 @@ void PointHandler::process()
     for (list<Point>::const_iterator unglobbedIterator = unglobbed.begin(); unglobbedIterator != unglobbed.end(); unglobbedIterator++) {
         list<Light>::iterator lightIterator;
         for (lightIterator = lights.begin(); lightIterator != lights.end(); lightIterator++) {
+            Point midpoint = calcMidpoint(*unglobbedIterator, (*lightIterator).position());
+            int r = 0, g = 0, b = 0;
+            for (int y = midpoint.y-4; y < midpoint.y+4; y+=2) {
+                uchar* ptr = (uchar*) (frame->imageData + y * frame->widthStep);
+                for (int x = midpoint.x-4; x < midpoint.x+4; x+=2) {
+                    r += ptr[3*x+0];
+                    g += ptr[3*x+1];
+                    b += ptr[3*x+2];
+                }
+            }
+
+            printf("midpoint rgb:(%d, %d, %d)\n", r/25, g/25, b/25);
+
             // "too close" to be considered a unique point... yea, that's a bit of stretch on the function name...
-            if (tooClose(*unglobbedIterator, (*lightIterator).position(), LIGHT_DIST_THRESHOLD)) {
+            //if (tooClose(*unglobbedIterator, (*lightIterator).position(), LIGHT_DIST_THRESHOLD)) {
+            if (r > MIDPOINT_COLOR_THRESHOLD*25 || g > MIDPOINT_COLOR_THRESHOLD*25 || b > MIDPOINT_COLOR_THRESHOLD*25) {
                 (*lightIterator) << (*unglobbedIterator);
                 decrement.erase(&*lightIterator);
                 break;
@@ -79,13 +86,16 @@ void PointHandler::process()
     int i = 0;
     for (list<Light>::iterator it = lights.begin(); it != lights.end(); it++) {
         Light l = *it;
-        /*
-        printf("Light %d - Position: (%d, %d), dPosition: (%d, %d)\n", i,
+        printf("Light %d - Position: (%d, %d), dPosition: (%d, %d), Distance: %d\n", i,
             l.position().x, l.position().y,
-        l.changeInPosition().x, l.changeInPosition.y);
-        */
-        printf("Light %d - Position: (%d, %d)\n", i,
-            l.position().x, l.position().y);
+            l.changeInPosition().x, l.changeInPosition().y, l.distanceTraveled());
         i++;
+    }
+    stringstream ss;
+    //debug print frame if crap happens
+    if (i>1){
+        ss<<"output"<<debugfilename<<".jpg";
+        debugfilename++;
+        cvSaveImage(ss.str().c_str(),frame);
     }
 }
