@@ -2,6 +2,8 @@
 #define EXECUTOR_HPP
 
 #include <list>
+#include <map>
+#include <string>
 
 #include "light.hpp"
 
@@ -26,6 +28,8 @@ namespace VisionControl
         bool hasMoved;
         bool hasMouseMoved;
 
+        std::map<std::string, std::string> commandMap;
+
         void determineHandedness(std::list<Light> &lights);
 
         // Methods abusing xdotool
@@ -45,6 +49,10 @@ namespace VisionControl
 
         enum ScrollControl { Up, Down };
         void scroll(ScrollControl dir);
+
+        // For gestures
+        std::string gestureString;
+        void loadCommandMap(const char* filename);
     };
 }
 

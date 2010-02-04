@@ -6,8 +6,12 @@ namespace VisionControl
     const int CAM_WIDTH  = 640;
     const int CAM_HEIGHT = 480;
 
+    // Configuration file for legacy gestures
+    const char* const GESTURE_CONFIG_FILE = "gestures.cfg";
+
+    // Sensitivity parameters:
     // Distance until gesture activates
-    const int GEST_DIST_THRESHOLD = 30;
+    const int GEST_DIST_THRESHOLD = 15;
 
     // Distance until a point is considered distinct from another
     const int POINT_DIST_THRESHOLD = 20;

@@ -1,7 +1,9 @@
-// TODO Delete:
-#include <cstdio>
+// TODO Better Error Handling
+#include <iostream>
+
 
 #include <cstdlib>
+#include <fstream>
 #include <sstream>
 
 #include "executor.hpp"
@@ -11,6 +13,7 @@ using namespace VisionControl;
 
 Executor::Executor() : currentState(Dead), left(0), right(0), hasMoved(false), hasMouseMoved(false)
 {
+    loadCommandMap(GESTURE_CONFIG_FILE);
 }
 
 void Executor::process(list<Light> &lights)
@@ -93,6 +96,11 @@ void Executor::process(list<Light> &lights)
                         scroll(Down);
                     }
 
+                    // Gestures
+                    if (left->gesture().last() == Gesture::Neutral && right->gesture().last() != Gesture::Neutral) {
+                        currentState = Gesture;
+                    }
+
                     charge = 0;
                     hasMoved = true;
                 } else {
@@ -132,6 +140,18 @@ void Executor::process(list<Light> &lights)
             }
             break;
         case Gesture:
+            hasMoved = true;
+            if (lights.size() == 2) {
+                gestureString = right->gesture().str();
+            }
+            if (lights.size() < 2) {
+                printf("BEFORE\n");
+                const char * const cmd = commandMap[gestureString].c_str();
+                printf("NOT BEFORE\n");
+                printf("GEST: %s, EXECUTING: %s\n", gestureString.c_str(),cmd);
+                system(cmd);
+                currentState = Dead;
+            }
             break;
     }
 }
@@ -216,3 +236,21 @@ void Executor::scroll(ScrollControl dir)
             break;
     }
 }
+
+void Executor::loadCommandMap(const char* filename) {
+     string line;
+     ifstream file(filename);
+
+     if (file.is_open()) {
+          while (!file.eof()) {
+               getline(file, line);
+               string gest  = line.substr(0, line.find(":"));
+               string cmd = line.substr(line.find(":") + 1);
+               commandMap[gest] = cmd;
+          }
+          file.close();
+     } else {
+          cerr << "Unable to open config!\n";
+     }
+}
+
