@@ -20,10 +20,10 @@ namespace VisionControl
     const int LIGHT_DIST_THRESHOLD = 50; // 100;
 
     // Minimum movement required to add to distance
-    const int JITTER_THRESHOLD = 5;
+    const int JITTER_THRESHOLD = 10;
 
     // Minimum R, G and B values to consider for a point
-    const int COLOR_THRESHOLD = 130;
+    const int COLOR_THRESHOLD = 150;
 
     // Minimum R, G and B values to consider in a midpoint for a continous glob
     const int MIDPOINT_COLOR_THRESHOLD = 130;
