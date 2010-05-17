@@ -145,9 +145,7 @@ void Executor::process(list<Light> &lights)
                 gestureString = right->gesture().str();
             }
             if (lights.size() < 2) {
-                printf("BEFORE\n");
                 const char * const cmd = commandMap[gestureString].c_str();
-                printf("NOT BEFORE\n");
                 printf("GEST: %s, EXECUTING: %s\n", gestureString.c_str(),cmd);
                 system(cmd);
                 currentState = Dead;
